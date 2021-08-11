@@ -13,6 +13,7 @@ module LogStash
         def initialize(bucket, json_key_path, logger)
           @logger = logger
           @bucket = bucket
+          @archive_bucket = archive_bucket
 
           # create client
           @storage = initialize_storage json_key_path
@@ -24,6 +25,12 @@ module LogStash
           end
         rescue Java::ComGoogleCloudStorage::StorageException => e
           raise "Error listing bucket contents: #{e}"
+        end
+
+        def archive_blob(blob)
+          @logger.info("Archiving #{blob.uri} in #{@archive_bucket}...")
+          blob.copy_to(@archive_bucket)
+          blob.delete!()
         end
 
         private

@@ -164,6 +164,7 @@ This plugin supports the following configuration options plus the <<plugins-{typ
 | <<plugins-{type}s-{plugin}-metadata_key>> |<<string,string>>|No
 | <<plugins-{type}s-{plugin}-processed_db_path>> |<<path,path>>|No
 | <<plugins-{type}s-{plugin}-delete>> |<<boolean,boolean>>|No
+| <<plugins-{type}s-{plugin}-archive_bucket_id>> |<<string,string>>|No
 | <<plugins-{type}s-{plugin}-unpack_gzip>> |<<boolean,boolean>>|No
 |=======================================================================
 
@@ -244,6 +245,16 @@ However, the data will not be shared across multiple running instances of Logsta
   * Default is: `false`
 
 Should the log file be deleted after its contents have been updated?
+
+[id="plugins-{type}s-{plugin}-archive_bucket_id"]
+===== `archive_bucket_id`
+
+  * Value type is <<string,string>>
+  * Default is: `nil`
+
+Should the log file be moved to `archive_bucket_id` after its contents have been updated?
+The log file location inside remains the same between buckets.
+Metadata is kept.
 
 [id="plugins-{type}s-{plugin}-unpack_gzip"]
 ===== `unpack_gzip`

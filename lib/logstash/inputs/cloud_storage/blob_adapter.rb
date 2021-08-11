@@ -28,6 +28,10 @@ module LogStash
           }
         end
 
+        def copy_to(target_bucket)
+          @blob.copyTo(target_bucket)
+        end
+
         java_import 'com.google.cloud.storage.Blob$BlobSourceOption'
         def delete!
           @blob.delete(BlobSourceOption.generationMatch())

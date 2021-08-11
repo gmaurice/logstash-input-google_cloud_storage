@@ -1,3 +1,9 @@
+## 0.12.0
+
+- Add the ability to archive log files in another bucket
+  it helps to improve performance when plugin is looking for
+  log files to process.
+
 ## 0.11.0
 
 - Change gzip file detection to use mime type instead of extension

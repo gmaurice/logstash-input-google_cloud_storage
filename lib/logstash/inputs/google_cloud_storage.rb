@@ -27,6 +27,7 @@ class LogStash::Inputs::GoogleCloudStorage < LogStash::Inputs::Base
   config :processed_db_path, :validate => :string, :default => nil
 
   config :delete, :validate => :boolean, :default => false
+  config :archive_bucket_id, :validate => :string, :default => nil
   config :unpack_gzip, :validate => :boolean, :default => true
 
   # Other Criteria
@@ -39,7 +40,7 @@ class LogStash::Inputs::GoogleCloudStorage < LogStash::Inputs::Base
   def register
     FileUtils.mkdir_p(@temp_directory) unless Dir.exist?(@temp_directory)
 
-    @client = LogStash::Inputs::CloudStorage::Client.new(@bucket_id, @json_key_file, @logger)
+    @client = LogStash::Inputs::CloudStorage::Client.new(@bucket_id, @json_key_file, @logger, @archive_bucket_id)
 
     if @processed_db_path.nil?
       ls_data = LogStash::SETTINGS.get_value('path.data')
@@ -105,6 +106,8 @@ class LogStash::Inputs::GoogleCloudStorage < LogStash::Inputs::Base
     blob.delete! if @delete
 
     @processed_db.mark_processed(blob) unless @processed_db_path.empty?
+
+    @client.archive_blob(blob) if @archive_bucket_id != nil
   end
 
   def extract_event(line, line_num, blob)
